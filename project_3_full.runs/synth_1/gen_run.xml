@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1668856078">
+<GenRun Id="synth_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1668859523">
   <File Type="PA-TCL" Name="tb_clk_div.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="tb_clk_div_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="tb_clk_div_reports.tcl"/>

@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Sat Nov 19 20:09:02 2022
+| Date         : Sat Nov 19 21:07:21 2022
 | Host         : LAPTOP-22H19F6H running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file tb_clk_div_control_sets_placed.rpt
 | Design       : tb_clk_div
@@ -58,7 +58,7 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |              53 |           24 |
+| No           | No                    | No                     |              53 |           28 |
 | No           | No                    | Yes                    |               0 |            0 |
 | No           | Yes                   | No                     |              38 |           12 |
 | Yes          | No                    | No                     |               0 |            0 |
@@ -70,17 +70,17 @@ Table of Contents
 4. Detailed Control Set Information
 -----------------------------------
 
-+--------------------------------------+---------------+--------------------------+------------------+----------------+--------------+
-|             Clock Signal             | Enable Signal |     Set/Reset Signal     | Slice Load Count | Bel Load Count | Bels / Slice |
-+--------------------------------------+---------------+--------------------------+------------------+----------------+--------------+
-|  clk_i_BUFG                          |               | meta_harden_rst_i0/load  |                1 |              1 |         1.00 |
-| ~meta_harden_btn_i0/signal_dst_reg_0 |               |                          |                1 |              1 |         1.00 |
-|  n_0_1_BUFG                          |               | meta_harden_rst_i0/clear |                2 |              4 |         2.00 |
-|  clk_i_BUFG                          |               |                          |                7 |              7 |         1.00 |
-|  clk_i_BUFG                          |               | clk1k/clk_1k_0           |                4 |             15 |         3.75 |
-|  clk1k/clk_1k                        |               |                          |                8 |             17 |         2.12 |
-|  clk_i_BUFG                          |               | clk100/clk_100_0         |                5 |             18 |         3.60 |
-|  n_0_1_BUFG                          |               |                          |                8 |             28 |         3.50 |
-+--------------------------------------+---------------+--------------------------+------------------+----------------+--------------+
++--------------------------------------+---------------+-------------------------------------+------------------+----------------+--------------+
+|             Clock Signal             | Enable Signal |           Set/Reset Signal          | Slice Load Count | Bel Load Count | Bels / Slice |
++--------------------------------------+---------------+-------------------------------------+------------------+----------------+--------------+
+|  clk_i_BUFG                          |               | meta_harden_rst_i0/signal_dst_reg_6 |                1 |              1 |         1.00 |
+| ~meta_harden_btn_i0/signal_dst_reg_0 |               |                                     |                1 |              1 |         1.00 |
+|  clk_100_BUFG                        |               | meta_harden_rst_i0/SR[0]            |                2 |              4 |         2.00 |
+|  clk_i_BUFG                          |               |                                     |                5 |              7 |         1.40 |
+|  clk_i_BUFG                          |               | clk1k/clk_1k_0                      |                4 |             15 |         3.75 |
+|  clk1k/clk_1k                        |               |                                     |                7 |             17 |         2.43 |
+|  clk_i_BUFG                          |               | clk100/clk_100_0                    |                5 |             18 |         3.60 |
+|  clk_100_BUFG                        |               |                                     |               15 |             28 |         1.87 |
++--------------------------------------+---------------+-------------------------------------+------------------+----------------+--------------+
 
 

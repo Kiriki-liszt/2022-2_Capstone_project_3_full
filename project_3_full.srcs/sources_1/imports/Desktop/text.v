@@ -20,6 +20,30 @@ module meta_harden (
 		end // always
 endmodule
 
+module clk_div_1 (clk, reset, clk_1);
+	input 			clk;
+	input 			reset;
+	output	reg 	clk_1 = 0;
+
+	reg [25:0]		clk_cnt = 0;
+
+	always @ (posedge clk) begin
+		if (!reset) begin 
+			clk_1 <= 0;
+			clk_cnt <= 0;
+		end
+		else begin
+			if (clk_cnt == 26'd49999999) begin
+				clk_1 <= ~clk_1;
+				clk_cnt <= 26'd0;
+			end
+			else begin
+				clk_cnt <= clk_cnt + 1;
+			end
+		end
+	end
+endmodule
+
 module clk_div_100 (clk, reset, clk_100);
 	input 			clk;
 	input 			reset;
@@ -42,7 +66,6 @@ module clk_div_100 (clk, reset, clk_100);
 			end
 		end
 	end
-
 endmodule
 
 
@@ -83,6 +106,7 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 
 	wire				clk_100;
 	wire				clk_1k;
+	wire				clk_1;
 
 	reg 				reset;
 	reg					pause;
@@ -117,6 +141,7 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 		
 	clk_div_100	clk100	(clk_i, reset, clk_100);
 	clk_div_1k	clk1k	(clk_i, reset, clk_1k);
+	clk_div_1k	clk1	(clk_i, reset, clk_1);
 
 	initial begin
 	    digit = 8'b1000_0000;
@@ -133,7 +158,7 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 		#112		reset = 1;
 	end
 
-	always @ (posedge clk_100 && pause == 1'b0) begin
+	always @ (posedge clk_100) begin
 		if (!rst_clk) begin
 			semi[0] = 4'd0;
 			semi[1] = 4'd0;
@@ -145,38 +170,40 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 			semi[7] = 4'd0;
 		end
 
-		semi[0] = semi[0] + 4'd1;
-		if (semi[0] == 4'd10) begin
-			semi[0] = 4'd0;
-			semi[1] = semi[1] + 4'd1;
+		if (pause == 1'b0) begin
+			semi[0] = semi[0] + 4'd1;
+			if (semi[0] == 4'd10) begin
+				semi[0] = 4'd0;
+				semi[1] = semi[1] + 4'd1;
+			end
+			if (semi[1] == 4'd10) begin 
+				semi[1] = 4'd0;
+				semi[2] = semi[2] + 4'd1;
+			end 
+			if (semi[2] == 4'd10) begin 
+				semi[2] = 4'd0;
+				semi[3] = semi[3] + 4'd1;
+			end 
+			if (semi[3] == 4'd6) begin 
+				semi[3] = 4'd0;
+				semi[4] = semi[4] + 4'd1;
+			end 
+			if (semi[4] == 4'd10) begin
+				semi[4] = 4'd0;
+				semi[5] = semi[5] + 4'd1;
+			end
+			if (semi[5] == 4'd6) begin 
+				semi[5] = 4'd0;
+				semi[6] = semi[6] + 4'd1;
+			end 
+			if (semi[6] == 4'd10) begin 
+				semi[6] = 4'd0;
+				semi[7] = semi[7] + 4'd1;
+			end 
+			if (semi[7] == 4'd10) begin 
+				semi[7] = 4'd0;
+			end 
 		end
-		if (semi[1] == 4'd10) begin 
-			semi[1] = 4'd0;
-			semi[2] = semi[2] + 4'd1;
-		end 
-		if (semi[2] == 4'd10) begin 
-			semi[2] = 4'd0;
-			semi[3] = semi[3] + 4'd1;
-		end 
-		if (semi[3] == 4'd6) begin 
-			semi[3] = 4'd0;
-			semi[4] = semi[4] + 4'd1;
-		end 
-		if (semi[4] == 4'd10) begin
-			semi[4] = 4'd0;
-			semi[5] = semi[5] + 4'd1;
-		end
-		if (semi[5] == 4'd6) begin 
-			semi[5] = 4'd0;
-			semi[6] = semi[6] + 4'd1;
-		end 
-		if (semi[6] == 4'd10) begin 
-			semi[6] = 4'd0;
-			semi[7] = semi[7] + 4'd1;
-		end 
-		if (semi[7] == 4'd10) begin 
-			semi[7] = 4'd0;
-		end 
 	end 
 
 	always @ (negedge mid_clk) begin
