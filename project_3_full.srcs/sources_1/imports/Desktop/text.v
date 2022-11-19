@@ -110,15 +110,17 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 
 	reg 				reset;
 	reg					pause;
+	reg					blink;
 
 	reg [3:0] 			semi[7:0];
 	reg [3:0] 			bcd;
+	reg [7:0]			selected;
 
-	wire             clk_i;
-	wire             rst_i;
-	wire             rst_clk;
-	wire             mid_i;
-	wire             mid_clk;
+	wire				clk_i;
+	wire				rst_i;
+	wire				rst_clk;
+	wire				mid_i;
+	wire				mid_clk;
 		
 	IBUF    IBUF_rst_i0    (.I (rst_pin),   .O (rst_i));
 	IBUF    IBUF_btn_i0    (.I (mid_pin),   .O (mid_i));
@@ -145,7 +147,9 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 
 	initial begin
 	    digit = 8'b1000_0000;
+		selected = 8'b1000_0000;
 		pause = 1'b0;
+		blink = 1'b0;
 		semi[0] = 4'd0;
 		semi[1] = 4'd0;
 		semi[2] = 4'd0;
@@ -209,6 +213,10 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 	always @ (negedge mid_clk) begin
 		pause = ~pause;
 	end
+
+	always @ (negedge clk_1) begin
+		blink = ~blink;
+	end
 	
 	always @ (posedge clk_1k) begin
 
@@ -243,6 +251,7 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 			8'b0100_0000, 8'b0001_0000, 8'b0000_0100, 8'b0000_0001: seg[0] = 1'b1;
 			default: seg[0] = 1'b0;
 		endcase
+		if ((digit == selected) && blink) seg = 8'b0000_0000;
 	end
 
 endmodule
