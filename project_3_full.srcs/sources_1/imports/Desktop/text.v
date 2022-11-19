@@ -214,7 +214,7 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 		pause = ~pause;
 	end
 
-	always @ (negedge clk_1) begin
+	always @ (posedge clk_1) begin
 		blink = ~blink;
 	end
 	
@@ -251,7 +251,7 @@ module tb_clk_div(clk_pin, rst_pin, mid_pin, seg, digit);
 			8'b0100_0000, 8'b0001_0000, 8'b0000_0100, 8'b0000_0001: seg[0] = 1'b1;
 			default: seg[0] = 1'b0;
 		endcase
-		if ((digit == selected) && blink) seg = 8'b0000_0000;
+		if ((digit == selected) && (blink == 1'b0)) seg = 8'b0000_0000;
 	end
 
 endmodule
