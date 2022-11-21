@@ -93,6 +93,7 @@ module clk_div_1k(clk, reset, clk_1k);
 	end
 endmodule
 
+
 `timescale 1ns/100ps
 module tb_clk_div(
 	input  				clk_pin,
@@ -113,10 +114,13 @@ module tb_clk_div(
 	reg 				reset;
 	reg					pause;
 	reg					blink;
+	reg					blink_left;
+	reg					blink_right;
 
 	reg [3:0] 			semi[7:0];
 	reg [3:0] 			bcd;
 	reg [7:0]			selected;
+	reg [7:0]			sel_left, sel_right;
 	reg [7:0]			able;
 	reg [7:0] 			sub;
 
@@ -188,11 +192,13 @@ module tb_clk_div(
 		
 	clk_div_100	clk100	(clk_i, reset, clk_100);
 	clk_div_1k	clk1k	(clk_i, reset, clk_1k);
-	clk_div_1k	clk1	(clk_i, reset, clk_1);
+	clk_div_1	clk1	(clk_i, reset, clk_1);
 
 	initial begin
 	    digit = 8'b1000_0000;
 		selected = 8'b1000_0000;
+		sel_left = 8'b1000_0000;
+		sel_right = 8'b1000_0000;
 		able = 8'b1111_1111;
 		pause = 1'b1;
 		blink = 1'b0;
@@ -213,6 +219,18 @@ module tb_clk_div(
 		pause = ~pause;
 	end
 
+	always @ (negedge left_clk) begin
+		sel_left = selected;
+		if (sel_left == 8'b1000_0000) sel_left = 8'b0000_0001;
+		else sel_left = sel_left << 1;
+	end
+
+	always @ (negedge right_clk) begin
+		sel_right = selected;
+		if (sel_right == 8'b0000_0001) sel_right = 8'b1000_0000;
+		else sel_right = sel_right >> 1;
+	end
+
 	always @ (posedge clk_1) begin
 		blink = ~blink;
 	end
@@ -222,8 +240,8 @@ module tb_clk_div(
 			semi[0] = 4'd0;
 			semi[1] = 4'd0;
 			semi[2] = 4'd1;
-			semi[3] = 4'd0;
-			semi[4] = 4'd0;
+			semi[3] = 4'd1;
+			semi[4] = 4'd1;
 			semi[5] = 4'd0;
 			semi[6] = 4'd0;
 			semi[7] = 4'd0;
@@ -336,6 +354,9 @@ module tb_clk_div(
 
 		if (digit == 8'b0000_0001) digit = 8'b1000_0000;
 		else digit = digit >> 1;
+
+		if ( (selected == sel_right) && (selected != sel_left) ) selected = sel_left;
+		if ( (selected == sel_left) && (selected != sel_right) ) selected = sel_right;
 
 		case (digit) 
 			8'b1000_0000: bcd = semi[7];
