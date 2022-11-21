@@ -194,7 +194,7 @@ module tb_clk_div(
 	    digit = 8'b1000_0000;
 		selected = 8'b1000_0000;
 		able = 8'b1111_1111;
-		pause = 1'b0;
+		pause = 1'b1;
 		blink = 1'b0;
 		semi[0] = 4'd9;
 		semi[1] = 4'd9;
@@ -245,19 +245,23 @@ module tb_clk_div(
 		else					able[1] = 1'b0;
 		if (able[1] || semi[1])	able[0] = 1'b1;
 		else					able[0] = 1'b0;
-		if (able[0] || semi[0]) able[0] = 1'b0;
 	
 		if (pause == 1'b0) begin
-			if ((semi[0] == 4'd0) && able[0]) begin
+			if ((semi[0] == 4'd0)) begin
 				if (able[0]) begin
 					semi[0] = 4'd9;
 					sub[1] = 1'b1;
 				end
+				else begin
+					sub[1] = 1'b0;
+				end
 			end
 			else begin 
 				semi[0] = semi[0] - 4'b1;
-				sub[2] = 1'b0;
+				sub[1] = 1'b0;
 			end
+
+
 			if (sub[1]) begin
 				if ((semi[1] == 4'd0) && able[1]) begin
 					semi[1] = 4'd9;
@@ -268,6 +272,8 @@ module tb_clk_div(
 					sub[2] = 1'b0;
 				end
 			end
+
+
 			if (sub[2]) begin
 				if ((semi[2] == 4'd0) && able[2]) begin
 					semi[2] = 4'd9;
@@ -319,10 +325,7 @@ module tb_clk_div(
 				end
 			end
 			if (sub[7]) begin
-				if ((semi[7] == 4'd0) && able[7]) begin
-					semi[7] = 4'd9;
-				end
-				else begin 
+				if ((semi[7] != 4'd0)) begin
 					semi[7] = semi[7] - 4'b1;
 				end
 			end
@@ -356,6 +359,7 @@ module tb_clk_div(
 			4'd7: seg = 8'b1110_0000;
 			4'd8: seg = 8'b1111_1110;
 			4'd9: seg = 8'b1110_0110;
+			4'd15: seg = 8'b0000_0010;
 			default: seg = 8'b0000_0000;
 		endcase
 		case (digit) 
