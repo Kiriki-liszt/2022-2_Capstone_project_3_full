@@ -198,12 +198,13 @@ module tb_clk_div(
 		blink = 1'b0;
 		semi[0] = 4'd9;
 		semi[1] = 4'd9;
-		semi[2] = 4'd5;
-		semi[3] = 4'd9;
-		semi[4] = 4'd5;
-		semi[5] = 4'd9;
+		semi[2] = 4'd9;
+		semi[3] = 4'd5;
+		semi[4] = 4'd9;
+		semi[5] = 4'd5;
 		semi[6] = 4'd9;
 		semi[7] = 4'd9;
+		sub = 8'b0;
         #5820000	reset = 0;
 		#112		reset = 1;
 	end
@@ -227,6 +228,8 @@ module tb_clk_div(
 			semi[6] = 4'd0;
 			semi[7] = 4'd0;
 		end
+
+		sub = 8'b0;
 
 		if (semi[7])			able[6] = 1'b1;
 		else					able[6] = 1'b0;
@@ -273,7 +276,7 @@ module tb_clk_div(
 			end
 			if (sub[3]) begin
 				if ((semi[3] == 4'd0) && able[3]) begin
-					semi[3] = 4'd9;
+					semi[3] = 4'd5;
 					sub[4] = 1'b1;
 				end
 				else begin 
@@ -293,7 +296,7 @@ module tb_clk_div(
 			end
 			if (sub[5]) begin
 				if ((semi[5] == 4'd0) && able[5]) begin
-					semi[5] = 4'd9;
+					semi[5] = 4'd5;
 					sub[6] = 1'b1;
 				end
 				else begin 
