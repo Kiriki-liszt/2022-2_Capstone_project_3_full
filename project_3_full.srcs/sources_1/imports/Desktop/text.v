@@ -221,7 +221,7 @@ module tb_clk_div(
 		if (!rst_clk) begin
 			semi[0] = 4'd0;
 			semi[1] = 4'd0;
-			semi[2] = 4'd0;
+			semi[2] = 4'd1;
 			semi[3] = 4'd0;
 			semi[4] = 4'd0;
 			semi[5] = 4'd0;
@@ -243,6 +243,8 @@ module tb_clk_div(
 		else					able[2] = 1'b0;
 		if (able[2] || semi[2])	able[1] = 1'b1;
 		else					able[1] = 1'b0;
+		if (able[1] || semi[1])	able[0] = 1'b1;
+		else					able[0] = 1'b0;
 	
 		if (pause == 1'b0) begin
 			if (semi[0] == 4'd0) begin
