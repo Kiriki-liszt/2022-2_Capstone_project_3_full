@@ -93,27 +93,6 @@ module clk_div_1k(clk, reset, clk_1k);
 	end
 endmodule
 
-module update(
-	input sub_in;
-	input [3:0] semi_in;
-	input able;
-	output reg sub_out;
-	output reg [3:0] semi_out;
-);
-
-	if (sub_in) begin
-		if ((semi_in == 4'b0) && able) begin
-			semi_out = 4'b9;
-			sub_out = 1'b1;
-		end
-		else begin 
-			semi_out = semi_in - 4'b1;
-			sub_out = 1'b0;
-		end
-	end
-endmodule
-
-
 `timescale 1ns/100ps
 module tb_clk_div(
 	input  				clk_pin,
@@ -225,7 +204,6 @@ module tb_clk_div(
 		semi[5] = 4'd9;
 		semi[6] = 4'd9;
 		semi[7] = 4'd9;
-		clk_sim = 1'b0;
         #5820000	reset = 0;
 		#112		reset = 1;
 	end
@@ -266,7 +244,7 @@ module tb_clk_div(
 		if (pause == 1'b0) begin
 			if (semi[0] == 4'd0) begin
 				if (able[0]) begin
-					semi[0] = 4'b9;
+					semi[0] = 4'd9;
 					sub[1] = 1'b1;
 				end
 			end
@@ -274,8 +252,8 @@ module tb_clk_div(
 				semi[0] = semi[0] - 4'b1;
 			end
 			if (sub[1]) begin
-				if ((semi[1] == 4'b0) && able[1]) begin
-					semi[1] = 4'b9;
+				if ((semi[1] == 4'd0) && able[1]) begin
+					semi[1] = 4'd9;
 					sub[2] = 1'b1;
 				end
 				else begin 
@@ -284,8 +262,8 @@ module tb_clk_div(
 				end
 			end
 			if (sub[2]) begin
-				if ((semi[2] == 4'b0) && able[2]) begin
-					semi[2] = 4'b9;
+				if ((semi[2] == 4'd0) && able[2]) begin
+					semi[2] = 4'd9;
 					sub[3] = 1'b1;
 				end
 				else begin 
@@ -294,8 +272,8 @@ module tb_clk_div(
 				end
 			end
 			if (sub[3]) begin
-				if ((semi[3] == 4'b0) && able[3]) begin
-					semi[3] = 4'b9;
+				if ((semi[3] == 4'd0) && able[3]) begin
+					semi[3] = 4'd9;
 					sub[4] = 1'b1;
 				end
 				else begin 
@@ -304,8 +282,8 @@ module tb_clk_div(
 				end
 			end
 			if (sub[4]) begin
-				if ((semi[4] == 4'b0) && able[4]) begin
-					semi[4] = 4'b9;
+				if ((semi[4] == 4'd0) && able[4]) begin
+					semi[4] = 4'd9;
 					sub[5] = 1'b1;
 				end
 				else begin 
@@ -314,8 +292,8 @@ module tb_clk_div(
 				end
 			end
 			if (sub[5]) begin
-				if ((semi[5] == 4'b0) && able[5]) begin
-					semi[5] = 4'b9;
+				if ((semi[5] == 4'd0) && able[5]) begin
+					semi[5] = 4'd9;
 					sub[6] = 1'b1;
 				end
 				else begin 
@@ -324,8 +302,8 @@ module tb_clk_div(
 				end
 			end
 			if (sub[6]) begin
-				if ((semi[6] == 4'b0) && able[6]) begin
-					semi[6] = 4'b9;
+				if ((semi[6] == 4'd0) && able[6]) begin
+					semi[6] = 4'd9;
 					sub[7] = 1'b1;
 				end
 				else begin 
@@ -334,8 +312,8 @@ module tb_clk_div(
 				end
 			end
 			if (sub[7]) begin
-				if ((semi[7] == 4'b0) && able[7]) begin
-					semi[7] = 4'b9;
+				if ((semi[7] == 4'd0) && able[7]) begin
+					semi[7] = 4'd9;
 				end
 				else begin 
 					semi[7] = semi[7] - 4'b1;
