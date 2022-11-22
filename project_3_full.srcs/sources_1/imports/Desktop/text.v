@@ -277,7 +277,7 @@ module tb_clk_div(
 						if (semi[7] == 4'd9) semi[7] = 4'd0;
 						else semi[7] = semi[7] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[7] == 4'd0) semi[7] = 4'd9;
 						else semi[7] = semi[7] - 4'd1;
 					end
@@ -287,7 +287,7 @@ module tb_clk_div(
 						if (semi[6] == 4'd9) semi[6] = 4'd0;
 						else semi[6] = semi[6] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[6] == 4'd0) semi[6] = 4'd9;
 						else semi[6] = semi[6] - 4'd1;
 					end
@@ -297,7 +297,7 @@ module tb_clk_div(
 						if (semi[5] == 4'd5) semi[5] = 4'd0;
 						else semi[5] = semi[5] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[5] == 4'd0) semi[5] = 4'd5;
 						else semi[5] = semi[5] - 4'd1;
 					end
@@ -307,7 +307,7 @@ module tb_clk_div(
 						if (semi[4] == 4'd9) semi[4] = 4'd0;
 						else semi[4] = semi[4] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[4] == 4'd0) semi[4] = 4'd9;
 						else semi[4] = semi[4] - 4'd1;
 					end
@@ -317,7 +317,7 @@ module tb_clk_div(
 						if (semi[3] == 4'd5) semi[3] = 4'd0;
 						else semi[3] = semi[3] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[3] == 4'd0) semi[3] = 4'd5;
 						else semi[3] = semi[3] - 4'd1;
 					end
@@ -327,7 +327,7 @@ module tb_clk_div(
 						if (semi[2] == 4'd9) semi[2] = 4'd0;
 						else semi[2] = semi[2] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[2] == 4'd0) semi[2] = 4'd9;
 						else semi[2] = semi[2] - 4'd1;
 					end
@@ -337,7 +337,7 @@ module tb_clk_div(
 						if (semi[1] == 4'd9) semi[1] = 4'd0;
 						else semi[1] = semi[1] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[1] == 4'd0) semi[1] = 4'd9;
 						else semi[1] = semi[1] - 4'd1;
 					end
@@ -347,7 +347,7 @@ module tb_clk_div(
 						if (semi[0] == 4'd9) semi[0] = 4'd0;
 						else semi[0] = semi[0] + 4'd1;
 					end
-					else if (down) begin
+					if (down) begin
 						if (semi[0] == 4'd0) semi[0] = 4'd9;
 						else semi[0] = semi[0] - 4'd1;
 					end
