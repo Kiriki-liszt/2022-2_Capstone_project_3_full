@@ -251,7 +251,7 @@ module tb_clk_div(
 					end
 					else if (down) begin								// 숫자를 내려야 한다면
 						if (semi[7] == 4'd0) semi[7] = 4'd9;			// 그리거 그게 만약 0이면 해당 자리위 최대 숫자로 올려라
-						else semi[7] = semi[7] - 4'd1;;					// 아니라면 하나 내려라
+						else semi[7] = semi[7] - 4'd1;					// 아니라면 하나 내려라
 					end
 				end
 				8'b0100_0000: begin
