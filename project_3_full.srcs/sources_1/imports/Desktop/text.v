@@ -20,10 +20,11 @@ module meta_harden (
 		end // always
 endmodule
 
-module clk_div_1 (clk, reset, clk_1);
-	input 			clk;
-	input 			reset;
-	output	reg 	clk_1 = 0;
+module clk_div_1 (
+	input 			clk,
+	input 			reset,
+	output	reg 	clk_1 = 0
+);
 
 	reg [25:0]		clk_cnt = 0;
 
@@ -44,10 +45,11 @@ module clk_div_1 (clk, reset, clk_1);
 	end
 endmodule
 
-module clk_div_100 (clk, reset, clk_100);
-	input 			clk;
-	input 			reset;
-	output	reg 	clk_100 = 0;
+module clk_div_100 (
+	input 			clk,
+	input 			reset,
+	output	reg 	clk_100 = 0
+);
 
 	reg [18:0]		clk_cnt = 0;
 
@@ -69,10 +71,11 @@ module clk_div_100 (clk, reset, clk_100);
 endmodule
 
 
-module clk_div_1k(clk, reset, clk_1k);
-	input 			clk;
-	input 			reset;
-	output	reg 	clk_1k = 0;
+module clk_div_1k(
+	input 			clk,
+	input 			reset,
+	output	reg 	clk_1k = 0
+);
 
 	reg [15:0]		clk_cnt = 0;
 
@@ -107,15 +110,21 @@ module tb_clk_div(
 	output reg [7:0]	seg
 );
 
+	wire				clk_1;
 	wire				clk_100;
 	wire				clk_1k;
-	wire				clk_1;
 
 	reg 				reset;
 	reg					pause;
 	reg					blink;
+	reg					init;
+	reg					rst_before;
+	reg					mid_before;
 	reg					left_before;
 	reg					right_before;
+	reg					up_before;
+	reg					down_before;
+	reg					up, down;
 
 	reg [3:0] 			semi[7:0];
 	reg [3:0] 			bcd;
@@ -124,12 +133,12 @@ module tb_clk_div(
 	reg [7:0] 			sub;
 
 	wire				clk_i;
-	wire				rst_i, rst_clk;
-	wire				mid_i, mid_clk;
-	wire				left_i, left_clk;
-	wire				right_i, right_clk;
-	wire				up_i, up_clk;
-	wire				down_i, down_clk;
+	wire				rst_i,		rst_clk;
+	wire				mid_i,		mid_clk;
+	wire				left_i, 	left_clk;
+	wire				right_i,	right_clk;
+	wire				up_i,		up_clk;
+	wire				down_i,		down_clk;
 	
 	IBUF	IBUF_clk_i0		(.I (clk_pin),		.O (clk_i));
 	IBUF	IBUF_rst_i0		(.I (rst_pin),		.O (rst_i));
@@ -188,44 +197,175 @@ module tb_clk_div(
 	clk_div_1	clk1	(clk_i, reset, clk_1);
 
 	initial begin
-	    digit = 8'b1000_0000;
-		selected = 8'b1000_0000;
-		left_before = left_clk;
-		right_before = right_clk;
-		able = 8'b1111_1111;
-		pause = 1'b1;
-		blink = 1'b0;
-		semi[0] = 4'd9;
-		semi[1] = 4'd9;
-		semi[2] = 4'd9;
-		semi[3] = 4'd5;
-		semi[4] = 4'd9;
-		semi[5] = 4'd5;
-		semi[6] = 4'd9;
-		semi[7] = 4'd9;
-		sub = 8'b0;
+	    digit			= 8'b1000_0000;
+		selected		= 8'b1000_0000;
+		rst_before		= rst_clk;
+		mid_before		= mid_clk;
+		left_before 	= left_clk;
+		right_before	= right_clk;
+		up_before 		= up_clk;
+		down_before		= down_clk;
+		able			= 8'b1111_1111;
+		sub 			= 8'b0;
+		pause			= 1'b1;
+		blink			= 1'b1;
+		init			= 1'b1;
+		up				= 1'b0;
+		down			= 1'b0;
+		semi[0]			= 4'd9;
+		semi[1]			= 4'd9;
+		semi[2]			= 4'd9;
+		semi[3]			= 4'd5;
+		semi[4]			= 4'd9;
+		semi[5]			= 4'd5;
+		semi[6]			= 4'd9;
+		semi[7]			= 4'd9;
         #5820000	reset = 0;
 		#112		reset = 1;
 	end
 
-	always @ (negedge mid_clk) begin
-		pause = ~pause;
-	end
-
-	always @ (posedge clk_1) begin
-		blink = ~blink;
-	end
-
 	always @ (posedge clk_100) begin
-		if (!rst_clk) begin
-			semi[0] = 4'd0;
-			semi[1] = 4'd0;
-			semi[2] = 4'd1;
-			semi[3] = 4'd1;
-			semi[4] = 4'd1;
-			semi[5] = 4'd0;
-			semi[6] = 4'd0;
-			semi[7] = 4'd0;
+
+		if (mid_before && ~mid_clk) begin
+			pause = ~pause;
+		end
+
+		if (rst_before && ~rst_clk) begin
+			rst_before		= rst_clk;
+			left_before 	= left_clk;
+			right_before	= right_clk;
+			up_before 		= up_clk;
+			down_before		= down_clk;
+			able			= 8'b1111_1111;
+			selected		= 8'b1000_0000;
+			sub 			= 8'b0;
+			pause			= 1'b1;
+			blink			= 1'b1;
+			init			= 1'b1;
+			up				= 1'b0;
+			down			= 1'b0;
+			semi[0]			= 4'd9;
+			semi[1]			= 4'd9;
+			semi[2]			= 4'd9;
+			semi[3]			= 4'd5;
+			semi[4]			= 4'd9;
+			semi[5]			= 4'd5;
+			semi[6]			= 4'd9;
+			semi[7]			= 4'd9;
+		end
+		
+		if (init) begin
+			
+			if (left_before && ~left_clk) begin
+				if (selected == 8'b1000_0000) selected = 8'b0000_0001;
+				else selected = selected << 1;
+			end
+			if (right_before && ~right_clk) begin
+				if (selected == 8'b0000_0001) selected = 8'b1000_0000;
+				else selected = selected >> 1;
+			end
+			if (up_before && ~up_clk) begin
+				up = 1'b1;
+			end
+			if (down_before && ~down_clk) begin
+				down = 1'b1;
+			end
+
+			case (selected) 
+				8'b1000_0000: begin
+					if (up) begin
+						if (semi[7] == 4'd9) semi[7] = 4'd0;
+						else semi[7] = semi[7] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[7] == 4'd0) semi[7] = 4'd9;
+						else semi[7] = semi[7] - 4'd1;
+					end
+				end
+				8'b0100_0000: begin
+					if (up) begin
+						if (semi[6] == 4'd9) semi[6] = 4'd0;
+						else semi[6] = semi[6] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[6] == 4'd0) semi[6] = 4'd9;
+						else semi[6] = semi[6] - 4'd1;
+					end
+				end
+				8'b0010_0000: begin
+					if (up) begin
+						if (semi[5] == 4'd5) semi[5] = 4'd0;
+						else semi[5] = semi[5] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[5] == 4'd0) semi[5] = 4'd5;
+						else semi[5] = semi[5] - 4'd1;
+					end
+				end
+				8'b0001_0000: begin
+					if (up) begin
+						if (semi[4] == 4'd9) semi[4] = 4'd0;
+						else semi[4] = semi[4] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[4] == 4'd0) semi[4] = 4'd9;
+						else semi[4] = semi[4] - 4'd1;
+					end
+				end
+				8'b0000_1000: begin
+					if (up) begin
+						if (semi[3] == 4'd5) semi[3] = 4'd0;
+						else semi[3] = semi[3] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[3] == 4'd0) semi[3] = 4'd5;
+						else semi[3] = semi[3] - 4'd1;
+					end
+				end
+				8'b0000_0100: begin
+					if (up) begin
+						if (semi[2] == 4'd9) semi[2] = 4'd0;
+						else semi[2] = semi[2] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[2] == 4'd0) semi[2] = 4'd9;
+						else semi[2] = semi[2] - 4'd1;
+					end
+				end
+				8'b0000_0010: begin
+					if (up) begin
+						if (semi[1] == 4'd9) semi[1] = 4'd0;
+						else semi[1] = semi[1] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[1] == 4'd0) semi[1] = 4'd9;
+						else semi[1] = semi[1] - 4'd1;
+					end
+				end
+				8'b0000_0001: begin
+					if (up) begin
+						if (semi[0] == 4'd9) semi[0] = 4'd0;
+						else semi[0] = semi[0] + 4'd1;
+					end
+					else if (down) begin
+						if (semi[0] == 4'd0) semi[0] = 4'd9;
+						else semi[0] = semi[0] - 4'd1;
+					end
+				end
+			endcase
+
+			if(~pause) begin 
+				init = 1'b0;
+				blink = 1'b0;
+			end 
+
+			rst_before		= rst_clk;
+			left_before 	= left_clk;
+			right_before	= right_clk;
+			up_before 		= up_clk;
+			down_before		= down_clk;
+			up				= 1'b0;
+			down			= 1'b0;
 		end
 
 		sub = 8'b0;
@@ -259,8 +399,6 @@ module tb_clk_div(
 				semi[0] = semi[0] - 4'b1;
 				sub[1] = 1'b0;
 			end
-
-
 			if (sub[1]) begin
 				if ((semi[1] == 4'd0) && able[1]) begin
 					semi[1] = 4'd9;
@@ -271,8 +409,6 @@ module tb_clk_div(
 					sub[2] = 1'b0;
 				end
 			end
-
-
 			if (sub[2]) begin
 				if ((semi[2] == 4'd0) && able[2]) begin
 					semi[2] = 4'd9;
@@ -329,21 +465,15 @@ module tb_clk_div(
 				end
 			end
 		end
+
+		mid_before		= mid_clk;
+
 	end 
 	
 	always @ (posedge clk_1k) begin
 
 		if (digit == 8'b0000_0001) digit = 8'b1000_0000;
 		else digit = digit >> 1;
-
-		if (left_before && ~left_clk) begin
-			if (selected == 8'b1000_0000) selected = 8'b0000_0001;
-			else selected = selected << 1;
-		end
-		if (right_before && ~right_clk) begin
-			if (selected == 8'b0000_0001) selected = 8'b1000_0000;
-			else selected = selected >> 1;
-		end
 
 		case (digit) 
 			8'b1000_0000: bcd = semi[7];
@@ -357,26 +487,27 @@ module tb_clk_div(
 			default: bcd = 4'd10;
 		endcase
 		case (bcd)
-			4'd0: seg = 8'b1111_1100;
-			4'd1: seg = 8'b0110_0000;
-			4'd2: seg = 8'b1101_1010;
-			4'd3: seg = 8'b1111_0010;
-			4'd4: seg = 8'b0110_0110;
-			4'd5: seg = 8'b1011_0110;
-			4'd6: seg = 8'b0011_1110;
-			4'd7: seg = 8'b1110_0000;
-			4'd8: seg = 8'b1111_1110;
-			4'd9: seg = 8'b1110_0110;
-			4'd15: seg = 8'b0000_0010;
-			default: seg = 8'b0000_0000;
+			4'd0:		seg = 8'b1111_1100;
+			4'd1:		seg = 8'b0110_0000;
+			4'd2:		seg = 8'b1101_1010;
+			4'd3:		seg = 8'b1111_0010;
+			4'd4:		seg = 8'b0110_0110;
+			4'd5:		seg = 8'b1011_0110;
+			4'd6:		seg = 8'b0011_1110;
+			4'd7:		seg = 8'b1110_0000;
+			4'd8:		seg = 8'b1111_1110;
+			4'd9:		seg = 8'b1110_0110;
+			4'd15:		seg = 8'b0000_0010;
+			default:	seg = 8'b0000_0000;
 		endcase
 		case (digit) 
 			8'b0100_0000, 8'b0001_0000, 8'b0000_0100, 8'b0000_0001: seg[0] = 1'b1;
 			default: seg[0] = 1'b0;
 		endcase
-		if ((digit == selected) && (blink == 1'b0)) seg = 8'b0000_0000;
-		left_before = left_clk;
-		right_before = right_clk;
+
+		if ((digit == selected) && blink && clk_1) begin
+			seg = 8'b0000_0000;
+		end
 	end
 
 endmodule
