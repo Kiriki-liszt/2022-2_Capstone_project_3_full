@@ -114,13 +114,12 @@ module tb_clk_div(
 	reg 				reset;
 	reg					pause;
 	reg					blink;
-	reg					blink_left;
-	reg					blink_right;
+	reg					left_before;
+	reg					right_before;
 
 	reg [3:0] 			semi[7:0];
 	reg [3:0] 			bcd;
 	reg [7:0]			selected;
-	reg [7:0]			sel_left, sel_right;
 	reg [7:0]			able;
 	reg [7:0] 			sub;
 
