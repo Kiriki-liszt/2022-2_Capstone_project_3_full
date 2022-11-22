@@ -190,8 +190,8 @@ module tb_clk_div(
 	initial begin
 	    digit = 8'b1000_0000;
 		selected = 8'b1000_0000;
-		sel_left = 8'b1000_0000;
-		sel_right = 8'b1000_0000;
+		left_before = left_clk;
+		right_before = right_clk;
 		able = 8'b1111_1111;
 		pause = 1'b1;
 		blink = 1'b0;
@@ -210,18 +210,6 @@ module tb_clk_div(
 
 	always @ (negedge mid_clk) begin
 		pause = ~pause;
-	end
-
-	always @ (negedge left_clk) begin
-		sel_left = selected;
-		if (sel_left == 8'b1000_0000) sel_left = 8'b0000_0001;
-		else sel_left = sel_left << 1;
-	end
-
-	always @ (negedge right_clk) begin
-		sel_right = selected;
-		if (sel_right == 8'b0000_0001) sel_right = 8'b1000_0000;
-		else sel_right = sel_right >> 1;
 	end
 
 	always @ (posedge clk_1) begin
@@ -348,8 +336,14 @@ module tb_clk_div(
 		if (digit == 8'b0000_0001) digit = 8'b1000_0000;
 		else digit = digit >> 1;
 
-		if ( (selected == sel_right) && (selected != sel_left) ) selected = sel_left;
-		if ( (selected == sel_left) && (selected != sel_right) ) selected = sel_right;
+		if (left_before && ~left_clk) begin
+			if (selected == 8'b1000_0000) selected = 8'b0000_0001;
+			else selected = selected << 1;
+		end
+		if (right_before && ~right_clk) begin
+			if (selected == 8'b0000_0001) selected = 8'b1000_0000;
+			else selected = selected >> 1;
+		end
 
 		case (digit) 
 			8'b1000_0000: bcd = semi[7];
@@ -381,6 +375,8 @@ module tb_clk_div(
 			default: seg[0] = 1'b0;
 		endcase
 		if ((digit == selected) && (blink == 1'b0)) seg = 8'b0000_0000;
+		left_before = left_clk;
+		right_before = right_clk;
 	end
 
 endmodule
