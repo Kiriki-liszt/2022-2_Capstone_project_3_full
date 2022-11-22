@@ -112,12 +112,14 @@ module tb_clk_div(
 	output reg [7:0]	digit,			// 출력한 숫자의 7-seg 위치
 	output reg [7:0]	seg				// 출력할 숫자의 내용
 );
-
+	reg					clock = 0;		// 시뮬레이션용 클럭
+	wire				clk_100_sim;	// 100Hz 클럭
+	wire				clk_1k_sim;		// 1000Hz 클럭
 	wire				clk_1;			// 1Hz 클럭
 	wire				clk_100;		// 100Hz 클럭
 	wire				clk_1k;			// 1000Hz 클럭
 
-	reg 				reset;			// 다양한 클럭 만드는 용의 리셋
+	reg 				reset = 1;		// 다양한 클럭 만드는 용의 리셋
 	reg					pause;			// 카운트 다운 중 일시정지
 	reg					blink;			// 초기화 상태 시 깜박임
 	reg					init;			// 초기화 상태
@@ -142,6 +144,11 @@ module tb_clk_div(
 	wire				right_i,	right_clk;
 	wire				up_i,		up_clk;
 	wire				down_i,		down_clk;
+
+	// 시뮬레이션용 모듈 밀 테스트벤치 클럭
+	always #5 clock = ~clock;
+	clk_div_100	clk100_sim	(clock, reset, clk_100_sim);
+	clk_div_1k	clk1k_sim	(clock, reset, clk_1k_sim);
 	
 	// 입력 버퍼
 	IBUF	IBUF_clk_i0		(.I (clk_pin),		.O (clk_i));

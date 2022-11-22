@@ -1,7 +1,7 @@
-Running: xsim.dir/tb_clk_div_behav/xsimk.exe -simmode gui -wdb tb_clk_div_behav.wdb -simrunnum 0 -socket 54628
+Running: xsim.dir/tb_clk_div_behav/xsimk.exe -simmode gui -wdb tb_clk_div_behav.wdb -simrunnum 0 -socket 64188
 Design successfully loaded
-Design Loading Memory Usage: 9968 KB (Peak: 9968 KB)
+Design Loading Memory Usage: 9680 KB (Peak: 9680 KB)
 Design Loading CPU Usage: 46 ms
 Simulation completed
-Simulation Memory Usage: 10512 KB (Peak: 10512 KB)
-Simulation CPU Usage: 61 ms
+Simulation Memory Usage: 18304 KB (Peak: 18304 KB)
+Simulation CPU Usage: 18999 ms
