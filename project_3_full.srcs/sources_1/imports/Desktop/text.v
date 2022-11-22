@@ -125,18 +125,12 @@ module tb_clk_div(
 	reg [7:0] 			sub;
 
 	wire				clk_i;
-	wire				rst_i;
-	wire				rst_clk;
-	wire				mid_i;
-	wire				mid_clk;
-	wire				left_i;
-	wire				left_clk;
-	wire				right_i;
-	wire				right_clk;
-	wire				up_i;
-	wire				up_clk;
-	wire				down_i;
-	wire				down_clk;
+	wire				rst_i, rst_clk;
+	wire				mid_i, mid_clk;
+	wire				left_i, left_clk;
+	wire				right_i, right_clk;
+	wire				up_i, up_clk;
+	wire				down_i, down_clk;
 	
 	IBUF	IBUF_clk_i0		(.I (clk_pin),		.O (clk_i));
 	IBUF	IBUF_rst_i0		(.I (rst_pin),		.O (rst_i));
