@@ -2,8 +2,8 @@
 module meta_harden (
 	input			clk_dst,      // Destination clock
 	input			rst_dst,      // Reset - synchronous to destination clock
-	input			signal_src,   // Asynchronous signal to be synchronized
-	output reg		signal_dst    // Synchronized signal
+	input           signal_src,   // Asynchronous signal to be synchronized
+	output  reg     signal_dst    // Synchronized signal
 );
 
 	reg				signal_meta; 
